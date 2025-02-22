@@ -55,8 +55,8 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker tag file-mgmt-system:${{ github.sha }} my-dockerhub-username/file-mgmt-system:staging
-          docker push my-dockerhub-username/file-mgmt-system:staging
+          docker tag file-mgmt-system:${{ github.sha }} nyanomeko/file-mgmt-system:staging
+          docker push nyanomeko/file-mgmt-system:staging
 
       - name: Deploy to Staging Server
         uses: appleboy/ssh-action@v0.1.7
@@ -65,10 +65,10 @@ jobs:
           username: ${{ secrets.STAGING_SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull my-dockerhub-username/file-mgmt-system:staging
+            docker pull nyanomeko/file-mgmt-system:staging
             docker stop file-mgmt || true
             docker rm file-mgmt || true
-            docker run -d --name file-mgmt -p 8080:8080 my-dockerhub-username/file-mgmt-system:staging
+            docker run -d --name file-mgmt -p 8080:8080 nyanomeko/file-mgmt-system:staging
 
   deploy-production:
     needs: deploy-staging
@@ -80,8 +80,8 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker tag file-mgmt-system:${{ github.sha }} my-dockerhub-username/file-mgmt-system:latest
-          docker push my-dockerhub-username/file-mgmt-system:latest
+          docker tag file-mgmt-system:${{ github.sha }} nyanomeko/file-mgmt-system:latest
+          docker push nyanomeko/file-mgmt-system:latest
 
       - name: Deploy to Production Server
         uses: appleboy/ssh-action@v0.1.7
@@ -90,7 +90,7 @@ jobs:
           username: ${{ secrets.PRODUCTION_SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull my-dockerhub-username/file-mgmt-system:latest
+            docker pull nyanomeko/file-mgmt-system:latest
             docker stop file-mgmt || true
             docker rm file-mgmt || true
-            docker run -d --name file-mgmt -p 80:8080 my-dockerhub-username/file-mgmt-system:latest
+            docker run -d --name file-mgmt -p 80:8080 nyanomeko/file-mgmt-system:latest
